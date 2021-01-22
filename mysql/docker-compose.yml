@@ -1,0 +1,77 @@
+version: '3.1'
+
+services:
+
+  db55:
+    image: mysql:5.5
+    #command: --default-authentication-plugin=mysql_native_password
+    restart: always
+    ports:
+      - 3355:3306
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+    volumes:
+      - ./data-files/db55:/var/lib/mysql
+      - ./customconfig.cnf:/etc/mysql/conf.d/customconfig.cnf
+    networks:
+      - default
+
+  db56:
+    image: mysql:5.6
+    command: --default-authentication-plugin=mysql_native_password
+    restart: always
+    ports:
+      - 3356:3306
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+    volumes:
+      - ./data-files/db56:/var/lib/mysql
+      - ./customconfig.cnf:/etc/mysql/conf.d/customconfig.cnf
+    networks:
+      - default
+
+  db57:
+    image: mysql:5.7
+    command: --default-authentication-plugin=mysql_native_password
+    restart: always
+    ports:
+      - 3357:3306
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+    volumes:
+      - ./data-files/db57:/var/lib/mysql
+      - ./customconfig.cnf:/etc/mysql/conf.d/customconfig.cnf
+    networks:
+      - default
+
+  db80:
+    image: mysql:8.0
+    command: --default-authentication-plugin=mysql_native_password
+    restart: always
+    ports:
+      - 3380:3306
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+    volumes:
+      - ./data-files/db80:/var/lib/mysql
+      - ./customconfig.cnf:/etc/mysql/conf.d/customconfig.cnf
+    networks:
+      - default
+    
+  phpmyadmin:
+    image: phpmyadmin
+    restart: always
+    ports:
+      - 8080:80
+    environment:
+      - PMA_ARBITRARY=1
+      - UPLOAD_LIMIT=100M
+    volumes:
+      - ./config.user.inc.php:/etc/phpmyadmin/config.user.inc.php
+    networks:
+      - default
+
+networks:
+  default:
+    external:
+      name: nginx-proxy_network
